@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6 text-justify">
+		<h1>Live Share</h1>
+		<br/>
+		<p>Bienvenue sur Live Share. Vous pouvez créer des playlist youtube anonymes, collaboratives et éphémères !</p>
+		<br/>
+		<br/>
+		<a class="btn btn-success btn-lg" type='button' href="{% url 'player:new' %}">
+			<i class="fa fa-plus"></i> Nouvelle playlist
+		</a>
+		<br/>
+		<br/>
+	</div>
+	<div class="col-md-6 text-justify">
+		<h1>Diffusions en cours</h1>
+		<br/>
+		{% for l in lists %}
+		<a class="card bg-secondary text-white" href="{{l.get_absolute_url}}">
+			<div class="card-body">
+				<i class="far fa-play-circle"></i>
+				{{l.name}}
+			</div>
+		</a>
+		<br/>
+		{% endfor %}
+</div>
+{% endblock %}

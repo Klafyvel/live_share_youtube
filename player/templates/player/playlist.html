@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block title %} - {{playlist.name}}{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-3">
+			<h1>{{playlist.name}}</h1>
+		</div>
+		<div class="col-md-3">
+			<a class="btn btn-success btn-sm" type='button' href="">
+				<i class="fa fa-edit"></i> Changer le nom
+			</a>
+		</div>
+		<div class="col-md-6">
+			Lien de partage : <input class="input-monospace" value="{{request.get_host}}{{playlist.get_absolute_url}}" type="text" readonly="">
+		</div>
+	</div>
+	<div class="row" style="height:100%">
+		<div class="col-md-6">
+			<h2>Lecture</h2>
+			<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+			<div id="player" style="max-width:100%"></div>
+			<form onSubmit="return addLink();" class="form" id="add_link_form">
+				{% csrf_token %}
+				{% bootstrap_form form %}
+				<button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Ajouter</button>
+			</form>
+    		<script>
+var tracks = [
+{% for link in playlist.link_set.all %}
+"{{link.token}}",
+{% endfor %}
+];
+ // 2. This code loads the IFrame Player API code asynchronously.
+var tag = document.createElement('script');
+var current_link = -1;
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 3. This function creates an <iframe> (and YouTube player)
+//    after the API code downloads.
+var player;
+function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+}
+
+// 4. The API will call this function when the video player is ready.
+function onPlayerReady(event) {
+    console.log(current_link);
+    console.log(tracks.length);
+  if(tracks.length > 0 && current_link < (tracks.length - 1)) {
+      current_link += 1
+      player.loadVideoById(tracks[current_link]);
+      event.target.playVideo();
+  }
+  setInterval(loadLinks, 5000);
+}
+
+function onPlayerStateChange(event) {
+  if (event.data == YT.PlayerState.ENDED) {
+	onPlayerReady();
+  }
+}
+function stopVideo() {
+  player.stopVideo();
+}
+function addLink() {
+    var form = $('#add_link_form');
+	$.ajax({
+		type: "post",
+		url: "{% url 'player:add' playlist.get_token %}",
+		data: form.serialize(),
+		async: true,
+		success: loadLinks,
+	})
+	$('#id_url').val('');
+	return false;
+}
+function updateLinks(data) {
+	var links = document.getElementById("links");
+	while (links.firstChild) {
+		    links.removeChild(links.firstChild);
+	}
+	var model = document.getElementById('link_template');
+	tracks = [];
+	for (var i=0; i<data.length; i++)
+	{
+		tracks.push(data[i].fields.token);
+		var card = model.cloneNode(true);
+		card.style.display = 'block';
+		card.id = 'link_' + data[i].fields.token;
+		card.getElementsByClassName('link_name')[0].innerHTML = data[i].fields.token;
+		links.appendChild(card);
+		links.append(document.createElement('br'));
+	}
+    if (current_link < 0) {
+        onPlayerReady();
+    }
+}
+function loadLinks() {
+	$.ajax({
+		type: "get",
+		url: "{% url 'player:list' playlist.get_token %}",
+		async: true,
+		success: updateLinks
+	})
+}
+    		</script>
+		</div>
+		<div class="col-md-6" style="height:100%; overflow-y:scroll;">
+			<h2>Pistes à venir</h2>
+			<div id="links">
+			{% for link in playlist.link_set.all %}
+			<div class="card bg-secondary text-white" href="{{l.get_absolute_url}}" id="link_{{link.token}}">
+				<div class="card-body">
+					<div class="row container">
+					<div class="col-md-6">
+						<i class="far fa-play-circle"></i>
+						{{link.token}}
+					</div>
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-3 btn-group">
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
+					</div>
+					</div>
+				</div>
+			</div>
+			<br/>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div style="display:none;" class="card bg-secondary text-white" href="{{l.get_absolute_url}}" id="link_template">
+				<div class="card-body">
+					<div class="row container">
+					<div class="col-md-6">
+						<i class="far fa-play-circle"></i>
+						<span class="link_name"></span>
+					</div>
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-3 btn-group">
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
+						<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
+					</div>
+					</div>
+				</div>
+			</div>
+
+{% endblock %}

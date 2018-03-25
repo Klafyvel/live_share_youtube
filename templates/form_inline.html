@@ -1,0 +1,6 @@
+{% load bootstrap4 %}
+<form action="" method="post" class="form" id="{{id}}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	<button class="btn btn-outline-primary"><i class="fa fa-star"></i> {{validate}}</button>
+</form>

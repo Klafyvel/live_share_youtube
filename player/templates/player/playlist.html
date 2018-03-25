@@ -56,8 +56,6 @@ function onYouTubeIframeAPIReady() {
 
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-    console.log(current_link);
-    console.log(tracks.length);
   if(tracks.length > 0 && current_link < (tracks.length - 1)) {
       current_link += 1
       player.loadVideoById(tracks[current_link]);
@@ -92,6 +90,7 @@ function updateLinks(data) {
 		    links.removeChild(links.firstChild);
 	}
 	var model = document.getElementById('link_template');
+    var rerun = (current_link >= tracks.length ) || current_link < 0;
 	tracks = [];
 	for (var i=0; i<data.length; i++)
 	{
@@ -103,7 +102,7 @@ function updateLinks(data) {
 		links.appendChild(card);
 		links.append(document.createElement('br'));
 	}
-    if (current_link < 0) {
+    if (rerun) {
         onPlayerReady();
     }
 }

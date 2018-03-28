@@ -30,29 +30,25 @@ function onPlayerReady(event) {
 function play() {
       player.loadVideoById(tracks[current_link]);
       player.playVideo();
-      document.getElementById(current_link).classList.add('bg-success');
-      document.getElementById(current_link).classList.remove('bg-secondary');
 }
 function next() {
-	if (current_link < (tracks.length -1)) {
-      current_link += 1;
-      play();
-	}
+      setCurrent(current_link + 1);
 }
 
 function prev() {
-	if (current_link > 0) {
-      current_link -= 1;
-      play();
-	}
+	setCurrent(current_link - 1);
 }
 
 function setCurrent(c) {
-    if(c > 0 && c < tracks.length) {
-		document.getElementById(current_link).classList.remove('bg-success');
-		document.getElementById(current_link).classList.add('bg-secondary');
+    if(c >= 0 && c < tracks.length) {
+		if(current_link >= 0 && current_link < tracks.length){
+			document.getElementById(current_link).classList.remove('bg-success');
+			document.getElementById(current_link).classList.add('bg-secondary');
+		}
         current_link = c;
         play();
+        document.getElementById(current_link).classList.add('bg-success');
+        document.getElementById(current_link).classList.remove('bg-secondary');
     }
 }
 

@@ -25,6 +25,7 @@ function onPlayerReady(event) {
       next();
   }
   setInterval(loadLinks, 5000);
+  $("#links").height($('#player').height());
 }
 
 function play() {

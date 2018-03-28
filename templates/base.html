@@ -13,14 +13,15 @@
     {% block js %}{% endblock %}
 </head>
 <body>
-	{% include 'navbar.html' %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/"><i class="fa fa-users"></i> LSY {% block nav_title %}{% endblock %}</a>
+	</nav>
 	<main role="main" class="container">
 	<br/>
 		{% bootstrap_messages %}
 
 		{% block content %}{% endblock %}
 	</main>
-		<hr/>
 	<footer class="footer container text-center text-muted">
 			LSY by Klafyvel
 	</footer>

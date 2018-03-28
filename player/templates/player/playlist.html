@@ -13,23 +13,16 @@
 	{% endfor %}];
     var add_url = "{% url 'player:add' playlist.get_token %}";
 	var get_url = "{% url 'player:list' playlist.get_token %}";
+	$(document).ready(function(){
+	    $(window).resize(function(){
+			$("#links").height($('#player').height());
+	    });
+	});
     </script>
 
-	<div class="row">
-		<div class="col-md-6">
-			<h1>{{playlist.name}}</h1>
-		</div>
-		<div class="col-md-3">
-			<a class="btn btn-outline-success btn-sm" type='button' href="">
-				<i class="fa fa-edit"></i> Changer le nom
-			</a>
-		</div>
-		<div class="col-md-3">
-			Lien de partage : <input class="input-monospace" value="{{request.get_host}}{{playlist.get_absolute_url}}" type="text" readonly="">
-		</div>
-	</div>
 	<div class="row" style="height:100%">
 		<div class="col-md-6">
+			<h1>{{playlist.name}}</h1>
 			<div class="row">
 				<div class="col-md-10">
 					<h2>Lecture</h2>
@@ -47,15 +40,10 @@
 			</div>
 			<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 			<div id="player" style="max-width:100%"></div>
-			<form onSubmit="return addLink();" class="form" id="add_link_form">
-				{% csrf_token %}
-				{% bootstrap_form form %}
-				<button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Ajouter</button>
-			</form>
 		</div>
-		<div class="col-md-6" style="height:100%; overflow-y:scroll;">
+		<div class="col-md-6">
 			<h2>Pistes à venir</h2>
-			<div id="links">
+			<div id="links" style="overflow-y:scroll;">
 			{% for link in playlist.link_set.all %}
 			<div class="card bg-secondary text-white" onclick="setCurrent(parseInt(this.id));" id="{{ forloop.counter0 }}">
 				<div class="card-body">
@@ -77,6 +65,16 @@
 			<br/>
 			{% endfor %}
 			</div>
+			<form onSubmit="return addLink();" class="form row border-top" id="add_link_form">
+				{% csrf_token %}
+				<div class="col-md-9">
+					{% bootstrap_form form %}
+				</div>
+				<div class="col-md-3">
+					<br/>
+					<button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Ajouter</button>
+				</div>
+			</form>
 		</div>
 	</div>
 	<div style="display:none;" onclick="setCurrent(parseInt(this.id));" class="card bg-secondary text-white" id="link_template">

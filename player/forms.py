@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-import datetime
+import django.utils.timezone as timezone
 
 from django import forms
 
@@ -11,7 +11,9 @@ class PlaylistForm(forms.ModelForm):
         fields = ['name']
 
     def is_valid(self):
-        self.instance.date = datetime.datetime.now()
+        self.instance.date = timezone.now()
+        self.instance.last_get = timezone.now()
+        self.instance.last_update = timezone.now()
         return super().is_valid()
 
 class LinkForm(forms.Form):

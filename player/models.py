@@ -9,6 +9,12 @@ class Playlist(models.Model):
         max_length=255,
         verbose_name="Nom de la playlist"
     )
+    last_update = models.DateTimeField(
+        verbose_name="Dernière mise à jour"
+    )
+    last_get = models.DateTimeField(
+        verbose_name="Dernière écoute"
+    )
 
     @staticmethod
     def reverse_token(token):
@@ -36,4 +42,4 @@ class Link(models.Model):
     )
 
     def __str__(self):
-        return "Link : " + self.url + " of " + str(self.playlist)
+        return "Link : " + self.token + " of " + str(self.playlist)

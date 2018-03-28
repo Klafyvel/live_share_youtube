@@ -1,9 +1,10 @@
-from urllib.parse import urlparse
-import django.utils.timezone as timezone
+from urllib.parse import urlparse, parse_qs
 
+import django.utils.timezone as timezone
 from django import forms
 
 from player.models import Playlist, Link
+
 
 class PlaylistForm(forms.ModelForm):
     class Meta:
@@ -21,6 +22,7 @@ class LinkForm(forms.Form):
 
     def get_token(self):
         p=urlparse(self.cleaned_data['url'])
-        print(p.query)
-        return [i for i in p.query.split('&') if i and i[0]=='v'][0].split('=')[-1]
+        p = parse_qs(p.query)
+        return p['v'][0]
+
 

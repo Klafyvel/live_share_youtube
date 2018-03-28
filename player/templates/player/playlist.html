@@ -60,17 +60,17 @@
 			<div class="card bg-secondary text-white" onclick="setCurrent(parseInt(this.id));" id="{{ forloop.counter0 }}">
 				<div class="card-body">
 					<div class="row container">
-                        <div class="col-md-6" >
+                        <div class="col-md-9" >
 						<i class="far fa-play-circle"></i>
-						{{link.token}}
-					</div>
-					<div class="col-md-3">
-					</div>
-					<div class="col-md-3 btn-group">
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
-					</div>
+						{{link.title}}
+						</div>
+						<div class="col-md-3">
+							<div class="btn-group">
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -82,17 +82,17 @@
 	<div style="display:none;" onclick="setCurrent(parseInt(this.id));" class="card bg-secondary text-white" id="link_template">
 				<div class="card-body">
 					<div class="row container">
-					<div class="col-md-6">
-						<i class="far fa-play-circle"></i>
-						<span class="link_name"></span>
-					</div>
-					<div class="col-md-3">
-					</div>
-					<div class="col-md-3 btn-group">
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
-						<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
-					</div>
+						<div class="col-md-9">
+							<i class="far fa-play-circle"></i>
+							<span class="link_name"></span>
+						</div>
+						<div class="col-md-3">
+							<div class="btn-group">
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-up"></i></a>
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-thumbs-down"></i></a>
+								<a class="btn btn-outline-light" href="#"><i class="fas fa-trash"></i></a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

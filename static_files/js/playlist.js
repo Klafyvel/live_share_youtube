@@ -88,14 +88,16 @@ function updateLinks(data) {
 	var model = document.getElementById('link_template');
     var rerun = (current_link >= tracks.length ) || current_link < 0;
 	tracks = [];
-	for (var i=0; i<data.tokens.length; i++)
+	for (var i=0; i<data.videos.length; i++)
 	{
-        var token = data.tokens[i];
+        var token = data.videos[i].token;
+		var title = data.videos[i].title;
+		console.debug(title);
 		tracks.push(token);
 		var card = model.cloneNode(true);
 		card.style.display = 'block';
 		card.id = i.toString();
-		card.getElementsByClassName('link_name')[0].innerHTML = token;
+		card.getElementsByClassName('link_name')[0].innerHTML = title;
         if (i==current_link) {
             card.classList.add('bg-success');
             card.classList.remove('bg-secondary');

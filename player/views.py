@@ -1,4 +1,6 @@
 import json
+import requests
+from urllib.parse import parse_qs
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -6,8 +8,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
 import django.utils.timezone as timezone
 
-from player.models import Playlist, Link
+from player.models import Playlist, Link, YOUTUBE_INFO_URL
 from player.forms import PlaylistForm, LinkForm
+
+
+
 
 def new_playlist(request):
     p = PlaylistForm(request.POST or None)
@@ -28,12 +33,15 @@ def get_list(request, token):
     p.save()
 
     d = {'tokens':[], 'updated':False}
-    last_up = p.last_update.timestamp()
-    last_sync = (int(request.GET['last_sync'])/1000)
+    print(p.last_update.timestamp(),int(request.GET.get('last_sync', 0))/1000)
+    print(p.last_update.timestamp() >= int(request.GET.get('last_sync', 0))/1000)
 
-    if p.last_update.timestamp() >= int(request.GET['last_sync'])/1000:
+
+    if p.last_update.timestamp() >= int(request.GET.get('last_sync', 0))/1000:
         d['updated'] = True
-        d['tokens'] = [l.token for l in p.link_set.all()]
+        d['videos'] = [
+            {'token':l.token, 'title':l.title} for l in p.link_set.all()
+        ]
     return HttpResponse(json.dumps(d), content_type='application/json')
 
 
@@ -42,11 +50,20 @@ def add_link(request, token):
     p = get_object_or_404(Playlist, pk=Playlist.reverse_token(token))
     l = LinkForm(request.POST or None)
     if l.is_valid():
+        yt_token = l.get_token()
+        response = requests.get(YOUTUBE_INFO_URL.format(yt_token))
+        try:
+            q = parse_qs(response.content.decode('utf-8'))
+            title = q['title'][0]
+        except KeyError:
+            print(yt_token)
+            print(q)
+            return HttpResponse('Error')
         p.last_update = timezone.now()
         p.save()
-        yt_token = l.get_token()
         link = Link()
         link.token = yt_token
+        link.title = title
         link.playlist = p
         link.save()
         return HttpResponse('Ok')

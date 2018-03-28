@@ -57,7 +57,7 @@
 			<h2>Pistes à venir</h2>
 			<div id="links">
 			{% for link in playlist.link_set.all %}
-			<div class="card bg-secondary text-white" onclick="setCurrentFromToken('{{link.token}}');" id="{{link.token}}">
+			<div class="card bg-secondary text-white" onclick="setCurrent(parseInt(this.id));" id="{{ forloop.counter0 }}">
 				<div class="card-body">
 					<div class="row container">
                         <div class="col-md-6" >
@@ -79,7 +79,7 @@
 			</div>
 		</div>
 	</div>
-	<div style="display:none;" class="card bg-secondary text-white" id="link_template">
+	<div style="display:none;" onclick="setCurrent(parseInt(this.id));" class="card bg-secondary text-white" id="link_template">
 				<div class="card-body">
 					<div class="row container">
 					<div class="col-md-6">

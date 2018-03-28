@@ -30,8 +30,8 @@ function onPlayerReady(event) {
 function play() {
       player.loadVideoById(tracks[current_link]);
       player.playVideo();
-      document.getElementById(tracks[current_link]).classList.add('bg-success');
-      document.getElementById(tracks[current_link]).classList.remove('bg-secondary');
+      document.getElementById(current_link).classList.add('bg-success');
+      document.getElementById(current_link).classList.remove('bg-secondary');
 }
 function next() {
 	if (current_link < (tracks.length -1)) {
@@ -49,13 +49,15 @@ function prev() {
 
 function setCurrent(c) {
     if(c > 0 && c < tracks.length) {
+		document.getElementById(current_link).classList.remove('bg-success');
+		document.getElementById(current_link).classList.add('bg-secondary');
         current_link = c;
         play();
     }
 }
 
 function setCurrentFromToken(token) {
-    setCurrent(tracks.indexOf(token));
+    setCurrent(tracks.lastIndexOf(token));
 }
 
 function onPlayerStateChange(event) {
@@ -96,8 +98,7 @@ function updateLinks(data) {
 		tracks.push(token);
 		var card = model.cloneNode(true);
 		card.style.display = 'block';
-		card.id = token;
-        card.onclick = function(){setCurrent(this.id);};
+		card.id = i.toString();
 		card.getElementsByClassName('link_name')[0].innerHTML = token;
         if (i==current_link) {
             card.classList.add('bg-success');

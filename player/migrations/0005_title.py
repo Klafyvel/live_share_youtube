@@ -1,16 +1,16 @@
-from urllib.parse import parse_qs
 import requests
+import json
 
 from django.db import models, migrations, transaction
-YOUTUBE_INFO_URL = 'http://youtube.com/get_video_info?video_id={}'
+YOUTUBE_INFO_URL = 'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v={}&format=json'
 
 def gen_title(apps, schema_editor):
     Link = apps.get_model('player', 'Link')
     for o in Link.objects.all():
         response = requests.get(YOUTUBE_INFO_URL.format(o.token))
-        q = parse_qs(response.content.decode('utf-8'))
+        q = json.loads(response.content.decode('utf-8'))
         try:
-            o.title = q['title'][0]
+            o.title = q['title']
         except KeyError:
             o.delete()
         else:

@@ -1,11 +1,11 @@
-from urllib.parse import parse_qs
 import requests
+import json
 
 from django.db import models
 from django.shortcuts import reverse
 
 PK_LENGTH = 23
-YOUTUBE_INFO_URL = 'http://youtube.com/get_video_info?video_id={}'
+YOUTUBE_INFO_URL = 'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v={}&format=json'
 
 class Playlist(models.Model):
     date = models.DateTimeField(verbose_name="date")
@@ -61,5 +61,5 @@ class Link(models.Model):
     def update_titles(cls):
         for o in cls.objects.all():
             response = requests.get(YOUTUBE_INFO_URL.format(o.token))
-            o.title = parse_qs(response.content.decode('utf-8'))['title'][0]
+            o.title = json.loads(response.content.decode('utf-8'))['title']
             o.save()

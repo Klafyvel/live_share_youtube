@@ -1,6 +1,5 @@
 import json
 import requests
-from urllib.parse import parse_qs
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -53,8 +52,8 @@ def add_link(request, token):
         yt_token = l.get_token()
         response = requests.get(YOUTUBE_INFO_URL.format(yt_token))
         try:
-            q = parse_qs(response.content.decode('utf-8'))
-            title = q['title'][0]
+            q = json.loads(response.content.decode('utf-8'))
+            title = q['title']
         except KeyError:
             title = "Je n'arrive pas à retrouver le titre :("
         p.last_update = timezone.now()

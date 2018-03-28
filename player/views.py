@@ -56,9 +56,7 @@ def add_link(request, token):
             q = parse_qs(response.content.decode('utf-8'))
             title = q['title'][0]
         except KeyError:
-            print(yt_token)
-            print(q)
-            return HttpResponse('Error')
+            title = "Je n'arrive pas à retrouver le titre :("
         p.last_update = timezone.now()
         p.save()
         link = Link()

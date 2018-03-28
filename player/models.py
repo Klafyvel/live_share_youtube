@@ -15,6 +15,10 @@ class Playlist(models.Model):
     last_get = models.DateTimeField(
         verbose_name="Dernière écoute"
     )
+    public = models.BooleanField(
+        verbose_name="Visible sur la page d'accueil",
+        default=True,
+    )
 
     @staticmethod
     def reverse_token(token):

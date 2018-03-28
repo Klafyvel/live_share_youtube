@@ -72,5 +72,5 @@ def playlist(request, token):
 
 
 def all_playlist(request):
-    p = Playlist.objects.all().order_by('date')
+    p = Playlist.objects.filter(public=True).order_by('date')
     return render(request, 'player/all_list.html', {'lists':p})

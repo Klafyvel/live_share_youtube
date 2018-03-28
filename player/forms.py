@@ -8,7 +8,7 @@ from player.models import Playlist, Link
 class PlaylistForm(forms.ModelForm):
     class Meta:
         model = Playlist
-        fields = ['name']
+        fields = ['name', 'public']
 
     def is_valid(self):
         self.instance.date = timezone.now()

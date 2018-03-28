@@ -16,15 +16,15 @@
     </script>
 
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-6">
 			<h1>{{playlist.name}}</h1>
 		</div>
 		<div class="col-md-3">
-			<a class="btn btn-success btn-sm" type='button' href="">
+			<a class="btn btn-outline-success btn-sm" type='button' href="">
 				<i class="fa fa-edit"></i> Changer le nom
 			</a>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-3">
 			Lien de partage : <input class="input-monospace" value="{{request.get_host}}{{playlist.get_absolute_url}}" type="text" readonly="">
 		</div>
 	</div>
